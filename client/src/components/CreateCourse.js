@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
+import { COURSE_FEED_QUERY } from './Courses';
 
 class CreateCourse extends Component {
   state = {
@@ -16,8 +17,8 @@ class CreateCourse extends Component {
     const { name, description } = this.state;
     return (
       <Mutation
-        mutation={ CREATE_COURSE_MUTATION }
-        update={ (cache, { data: { createCourse } }) => {
+        mutation={CREATE_COURSE_MUTATION}
+        update={(cache, { data: { createCourse } }) => {
           const { courseFeed } = cache.readQuery({
             query: COURSE_FEED_QUERY
           });
@@ -82,16 +83,6 @@ class CreateCourse extends Component {
     );
   }
 }
-const COURSE_FEED_QUERY = gql`
-  {
-    courseFeed {
-      id
-      description
-      name
-      isPublished
-    }
-  }
-`;
 const CREATE_COURSE_MUTATION = gql`
   mutation CreateCourse($name: String!, $description: String!) {
     createCourse(name: $name, description: $description) {
