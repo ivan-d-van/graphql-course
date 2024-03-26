@@ -5,6 +5,14 @@ type Query {
   courseFeed: [Course!]!
   course(id: ID!): Course!
 }
+type AuthPayload {
+  token: String!
+  user: User
+}
+type User {
+  id: ID!
+  email: String!
+}
 
 type Mutation {
   createDraft(title: String!, text: String): Post
@@ -13,4 +21,5 @@ type Mutation {
   deleteCourse(id: ID!): Course
   deletePost(id: ID!): Post
   publish(id: ID!): Post
+  signup(email: String!, password: String!): AuthPayload
 }
