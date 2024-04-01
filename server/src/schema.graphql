@@ -2,8 +2,12 @@ type Query {
   feed: [Post!]!
   drafts: [Post!]!
   post(id: ID!): Post
-  courseFeed: [Course!]!
+  courseFeed(first: Int, skip: Int, filter: String): CourseFeed!
   course(id: ID!): Course!
+}
+type CourseFeed {
+  courses: [Course!]!
+  count: Int!
 }
 type AuthPayload {
   token: String!
@@ -22,4 +26,5 @@ type Mutation {
   deletePost(id: ID!): Post
   publish(id: ID!): Post
   signup(email: String!, password: String!): AuthPayload
+  login(email: String!, password: String!): AuthPayload
 }

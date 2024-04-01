@@ -1,21 +1,264 @@
+# source: https://eu1.prisma.sh/haidermalik504/demo-app/dev
+# timestamp: Thu Aug 30 2018 18:24:22 GMT+0500 (PKT)
+
+type AggregateCourse {
+  count: Int!
+}
 
 type AggregatePost {
   count: Int!
 }
 
-type BatchPayload {
-  count: Long!
+type AggregateUser {
+  count: Int!
 }
 
+type BatchPayload {
+    count: Long!
+}
+
+type Course implements Node {
+  id: ID!
+  isPublished: Boolean!
+  name: String!
+  description: String!
+  postedBy(where: UserWhereInput): User
+}
+
+type CourseConnection {
+    pageInfo: PageInfo!
+
+    edges: [CourseEdge]!
+  aggregate: AggregateCourse!
+}
+
+input CourseCreateInput {
+  isPublished: Boolean
+  name: String!
+  description: String!
+  postedBy: UserCreateOneWithoutCoursesInput
+}
+
+input CourseCreateManyWithoutPostedByInput {
+  create: [CourseCreateWithoutPostedByInput!]
+  connect: [CourseWhereUniqueInput!]
+}
+
+input CourseCreateWithoutPostedByInput {
+  isPublished: Boolean
+  name: String!
+  description: String!
+}
+
+type CourseEdge {
+    node: Course!
+
+    cursor: String!
+}
+
+enum CourseOrderByInput {
+  id_ASC
+  id_DESC
+  isPublished_ASC
+  isPublished_DESC
+  name_ASC
+  name_DESC
+  description_ASC
+  description_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type CoursePreviousValues {
+  id: ID!
+  isPublished: Boolean!
+  name: String!
+  description: String!
+}
+
+type CourseSubscriptionPayload {
+  mutation: MutationType!
+  node: Course
+  updatedFields: [String!]
+  previousValues: CoursePreviousValues
+}
+
+input CourseSubscriptionWhereInput {
+    AND: [CourseSubscriptionWhereInput!]
+
+    OR: [CourseSubscriptionWhereInput!]
+
+    NOT: [CourseSubscriptionWhereInput!]
+
+    The subscription event gets dispatched when it's listed in mutation_in
+    mutation_in: [MutationType!]
+
+    The subscription event gets only dispatched when one of the updated fields names is included in this list
+    updatedFields_contains: String
+
+    The subscription event gets only dispatched when all of the field names included in this list have been updated
+    updatedFields_contains_every: [String!]
+
+    The subscription event gets only dispatched when some of the field names included in this list have been updated
+    updatedFields_contains_some: [String!]
+  node: CourseWhereInput
+}
+
+input CourseUpdateInput {
+  isPublished: Boolean
+  name: String
+  description: String
+  postedBy: UserUpdateOneWithoutCoursesInput
+}
+
+input CourseUpdateManyWithoutPostedByInput {
+  create: [CourseCreateWithoutPostedByInput!]
+  connect: [CourseWhereUniqueInput!]
+  disconnect: [CourseWhereUniqueInput!]
+  delete: [CourseWhereUniqueInput!]
+  update: [CourseUpdateWithWhereUniqueWithoutPostedByInput!]
+  upsert: [CourseUpsertWithWhereUniqueWithoutPostedByInput!]
+}
+
+input CourseUpdateWithoutPostedByDataInput {
+  isPublished: Boolean
+  name: String
+  description: String
+}
+
+input CourseUpdateWithWhereUniqueWithoutPostedByInput {
+  where: CourseWhereUniqueInput!
+  data: CourseUpdateWithoutPostedByDataInput!
+}
+
+input CourseUpsertWithWhereUniqueWithoutPostedByInput {
+  where: CourseWhereUniqueInput!
+  update: CourseUpdateWithoutPostedByDataInput!
+  create: CourseCreateWithoutPostedByInput!
+}
+
+input CourseWhereInput {
+    AND: [CourseWhereInput!]
+
+    OR: [CourseWhereInput!]
+
+    NOT: [CourseWhereInput!]
+  id: ID
+
+    id_not: ID
+
+    id_in: [ID!]
+
+    id_not_in: [ID!]
+
+    id_lt: ID
+
+    id_lte: ID
+
+    id_gt: ID
+
+    id_gte: ID
+
+    id_contains: ID
+
+    id_not_contains: ID
+
+    id_starts_with: ID
+
+    id_not_starts_with: ID
+
+    id_ends_with: ID
+
+    id_not_ends_with: ID
+  isPublished: Boolean
+
+    isPublished_not: Boolean
+  name: String
+
+    name_not: String
+
+    name_in: [String!]
+
+    name_not_in: [String!]
+
+    name_lt: String
+
+    name_lte: String
+
+    name_gt: String
+
+    name_gte: String
+
+    name_contains: String
+
+    name_not_contains: String
+
+    name_starts_with: String
+
+    name_not_starts_with: String
+
+    name_ends_with: String
+
+    name_not_ends_with: String
+  description: String
+
+    description_not: String
+
+    description_in: [String!]
+
+    description_not_in: [String!]
+
+    description_lt: String
+
+    description_lte: String
+
+    description_gt: String
+
+    description_gte: String
+
+    description_contains: String
+
+    description_not_contains: String
+
+    description_starts_with: String
+
+    description_not_starts_with: String
+
+    description_ends_with: String
+
+    description_not_ends_with: String
+  postedBy: UserWhereInput
+}
+
+input CourseWhereUniqueInput {
+  id: ID
+}
+
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
   createPost(data: PostCreateInput!): Post!
+  createCourse(data: CourseCreateInput!): Course!
+  createUser(data: UserCreateInput!): User!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
+  updateCourse(data: CourseUpdateInput!, where: CourseWhereUniqueInput!): Course
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deletePost(where: PostWhereUniqueInput!): Post
+  deleteCourse(where: CourseWhereUniqueInput!): Course
+  deleteUser(where: UserWhereUniqueInput!): User
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
+  upsertCourse(where: CourseWhereUniqueInput!, create: CourseCreateInput!, update: CourseUpdateInput!): Course!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
+  updateManyCourses(data: CourseUpdateInput!, where: CourseWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
+  deleteManyCourses(where: CourseWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -25,14 +268,17 @@ enum MutationType {
 }
 
 interface Node {
-  id: ID!
+    id: ID!
 }
 
 type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
-  endCursor: String
+    hasNextPage: Boolean!
+
+    hasPreviousPage: Boolean!
+
+    startCursor: String
+
+    endCursor: String
 }
 
 type Post implements Node {
@@ -43,9 +289,9 @@ type Post implements Node {
 }
 
 type PostConnection {
-  pageInfo: PageInfo!
+    pageInfo: PageInfo!
 
-  edges: [PostEdge]!
+    edges: [PostEdge]!
   aggregate: AggregatePost!
 }
 
@@ -56,8 +302,9 @@ input PostCreateInput {
 }
 
 type PostEdge {
-  node: Post!
-  cursor: String!
+    node: Post!
+
+    cursor: String!
 }
 
 enum PostOrderByInput {
@@ -90,19 +337,23 @@ type PostSubscriptionPayload {
 }
 
 input PostSubscriptionWhereInput {
-  AND: [PostSubscriptionWhereInput!]
+    AND: [PostSubscriptionWhereInput!]
 
-  OR: [PostSubscriptionWhereInput!]
+    OR: [PostSubscriptionWhereInput!]
 
-  NOT: [PostSubscriptionWhereInput!]
+    NOT: [PostSubscriptionWhereInput!]
 
-  mutation_in: [MutationType!]
+    The subscription event gets dispatched when it's listed in mutation_in
+    mutation_in: [MutationType!]
 
-  updatedFields_contains: String
+    The subscription event gets only dispatched when one of the updated fields names is included in this list
+    updatedFields_contains: String
 
-  updatedFields_contains_every: [String!]
-  
-  updatedFields_contains_some: [String!]
+    The subscription event gets only dispatched when all of the field names included in this list have been updated
+    updatedFields_contains_every: [String!]
+
+    The subscription event gets only dispatched when some of the field names included in this list have been updated
+    updatedFields_contains_some: [String!]
   node: PostWhereInput
 }
 
@@ -113,96 +364,95 @@ input PostUpdateInput {
 }
 
 input PostWhereInput {
-  AND: [PostWhereInput!]
+    AND: [PostWhereInput!]
 
-  OR: [PostWhereInput!]
+    OR: [PostWhereInput!]
 
-  NOT: [PostWhereInput!]
+    NOT: [PostWhereInput!]
   id: ID
 
-  id_not: ID
+    id_not: ID
 
-  id_in: [ID!]
+    id_in: [ID!]
 
-  id_not_in: [ID!]
+    id_not_in: [ID!]
 
-  id_lt: ID
+    id_lt: ID
 
-  id_lte: ID
+    id_lte: ID
 
-  id_gt: ID
+    id_gt: ID
 
-  id_gte: ID
+    id_gte: ID
 
-  id_contains: ID
+    id_contains: ID
 
-  id_not_contains: ID
+    id_not_contains: ID
 
-  id_starts_with: ID
+    id_starts_with: ID
 
-  id_not_starts_with: ID
+    id_not_starts_with: ID
 
-  id_ends_with: ID
+    id_ends_with: ID
 
-  id_not_ends_with: ID
+    id_not_ends_with: ID
   isPublished: Boolean
 
-  isPublished_not: Boolean
+    isPublished_not: Boolean
   title: String
 
-  title_not: String
+    title_not: String
 
-  title_in: [String!]
+    title_in: [String!]
 
-  title_not_in: [String!]
+    title_not_in: [String!]
 
-  title_lt: String
+    title_lt: String
 
-  title_lte: String
+    title_lte: String
 
-  title_gt: String
+    title_gt: String
 
-  """All values greater than or equal the given value."""
-  title_gte: String
+    title_gte: String
 
-  title_contains: String
+    title_contains: String
 
-  title_not_contains: String
+    title_not_contains: String
 
-  title_starts_with: String
+    title_starts_with: String
 
-  title_not_starts_with: String
+    title_not_starts_with: String
 
-  title_ends_with: String
+    title_ends_with: String
 
-  title_not_ends_with: String
+    title_not_ends_with: String
   text: String
 
-  text_not: String
+    text_not: String
 
-  text_in: [String!]
+    text_in: [String!]
 
-  text_not_in: [String!]
+    text_not_in: [String!]
 
-  text_lt: String
+    text_lt: String
 
-  text_lte: String
+    text_lte: String
 
-  text_gt: String
+    text_gt: String
 
-  text_gte: String
+    text_gte: String
 
-  text_contains: String
+    text_contains: String
 
-  text_not_contains: String
+    text_not_contains: String
 
-  text_starts_with: String
+    text_starts_with: String
 
-  text_not_starts_with: String
+    text_not_starts_with: String
 
-  text_ends_with: String
+    text_ends_with: String
 
-  text_not_ends_with: String
+    text_not_ends_with: String
 }
 
 input PostWhereUniqueInput {
@@ -219,8 +469,9 @@ type Query {
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   coursesConnection(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CourseConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-  node(
-    id: ID!
+
+    node(
+        id: ID!
   ): Node
 }
 
@@ -234,25 +485,36 @@ type User implements Node {
   id: ID!
   email: String!
   password: String!
+  courses(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course!]
 }
 
-
 type UserConnection {
-  pageInfo: PageInfo!
+    pageInfo: PageInfo!
 
-  edges: [UserEdge]!
+    edges: [UserEdge]!
   aggregate: AggregateUser!
 }
 
 input UserCreateInput {
   email: String!
   password: String!
+  courses: CourseCreateManyWithoutPostedByInput
+}
+
+input UserCreateOneWithoutCoursesInput {
+  create: UserCreateWithoutCoursesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutCoursesInput {
+  email: String!
+  password: String!
 }
 
 type UserEdge {
-  node: User!
+    node: User!
 
-  cursor: String!
+    cursor: String!
 }
 
 enum UserOrderByInput {
@@ -282,102 +544,126 @@ type UserSubscriptionPayload {
 }
 
 input UserSubscriptionWhereInput {
-  AND: [UserSubscriptionWhereInput!]
+    AND: [UserSubscriptionWhereInput!]
 
-  OR: [UserSubscriptionWhereInput!]
+    OR: [UserSubscriptionWhereInput!]
 
-  NOT: [UserSubscriptionWhereInput!]
+    NOT: [UserSubscriptionWhereInput!]
 
-  mutation_in: [MutationType!]
+    The subscription event gets dispatched when it's listed in mutation_in
+    mutation_in: [MutationType!]
 
-  updatedFields_contains: String
+    The subscription event gets only dispatched when one of the updated fields names is included in this list
+    updatedFields_contains: String
 
-  updatedFields_contains_every: [String!]
+    The subscription event gets only dispatched when all of the field names included in this list have been updated
+    updatedFields_contains_every: [String!]
 
-  updatedFields_contains_some: [String!]
+    The subscription event gets only dispatched when some of the field names included in this list have been updated
+    updatedFields_contains_some: [String!]
   node: UserWhereInput
 }
 
 input UserUpdateInput {
   email: String
   password: String
+  courses: CourseUpdateManyWithoutPostedByInput
+}
+
+input UserUpdateOneWithoutCoursesInput {
+  create: UserCreateWithoutCoursesInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateWithoutCoursesDataInput
+  upsert: UserUpsertWithoutCoursesInput
+}
+
+input UserUpdateWithoutCoursesDataInput {
+  email: String
+  password: String
+}
+
+input UserUpsertWithoutCoursesInput {
+  update: UserUpdateWithoutCoursesDataInput!
+  create: UserCreateWithoutCoursesInput!
 }
 
 input UserWhereInput {
-  AND: [UserWhereInput!]
+    AND: [UserWhereInput!]
 
-  OR: [UserWhereInput!]
+    OR: [UserWhereInput!]
 
-  NOT: [UserWhereInput!]
+    NOT: [UserWhereInput!]
   id: ID
 
-  id_not: ID
+    id_not: ID
 
-  id_in: [ID!]
+    id_in: [ID!]
 
-  id_not_in: [ID!]
+    id_not_in: [ID!]
 
-  id_lt: ID
+    id_lt: ID
 
-  id_lte: ID
+    id_lte: ID
 
-  id_gt: ID
+    id_gt: ID
 
-  id_gte: ID
+    id_gte: ID
 
-  id_contains: ID
+    id_contains: ID
 
-  id_not_contains: ID
+    id_not_contains: ID
 
-  id_starts_with: ID
+    id_starts_with: ID
 
-  id_not_starts_with: ID
+    id_not_starts_with: ID
 
-  id_ends_with: ID
+    id_ends_with: ID
 
-  id_not_ends_with: ID
+    id_not_ends_with: ID
   email: String
 
-  email_not: String
+    email_not: String
 
-  email_in: [String!]
+    email_in: [String!]
 
-  email_not_in: [String!]
+    email_not_in: [String!]
 
-  email_lt: String
+    email_lt: String
 
-  email_lte: String
+    email_lte: String
 
-  email_gt: String
+    email_gt: String
 
-  email_gte: String
+    email_gte: String
 
-  email_contains: String
+    email_contains: String
 
-  email_not_contains: String
+    email_not_contains: String
 
-  email_starts_with: String
+    email_starts_with: String
 
-  email_not_starts_with: String
+    email_not_starts_with: String
 
-  email_ends_with: String
+    email_ends_with: String
 
-  email_not_ends_with: String
+    email_not_ends_with: String
   password: String
 
-  password_not: String
+    password_not: String
 
-  password_in: [String!]
+    password_in: [String!]
 
-  password_not_in: [String!]
+    password_not_in: [String!]
 
-  password_lt: String
+    password_lt: String
 
-  password_lte: String
+    password_lte: String
 
-  password_gt: String
+    password_gt: String
 
-  password_gte: String
+    password_gte: String
 
   password_contains: String
 
@@ -390,6 +676,9 @@ input UserWhereInput {
   password_ends_with: String
 
   password_not_ends_with: String
+  courses_every: CourseWhereInput
+  courses_some: CourseWhereInput
+  courses_none: CourseWhereInput
 }
 
 input UserWhereUniqueInput {
